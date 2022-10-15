@@ -36,18 +36,37 @@ namespace LeechingSeedBuff
         {
             try
             {
-                IL.RoR2.GlobalEventManager.OnHitEnemy += (il) =>
+                // Sets leeching seed to heal 0.2 per instance of damage
+                IL.RoR2.HealthComponent.TakeDamage += (il) =>
                 {
                     ILCursor c = new ILCursor(il);
                     c.TryGotoNext(
-                        x => x.MatchLdloc(out _),
-                        x => x.MatchLdloc(out _),
-                        x => x.MatchConvR4(),
                         x => x.MatchLdarg(out _),
-                        x => x.MatchLdfld<RoR2.DamageInfo>(nameof(RoR2.DamageInfo.procCoefficient))
+                        x => x.MatchCallOrCallvirt<RoR2.HealthComponent>(nameof(RoR2.HealthComponent.combinedHealth)),
+                        x => x.MatchStloc(out _)
                     );
-                    c.Index += 4;
-                    c.RemoveRange(2);
+                    c.Emit(OpCodes.Ldarg_1);
+                    c.EmitDelegate<Action<RoR2.DamageInfo>>((damageInfo) =>
+                    {
+                        CharacterBody component1 = damageInfo?.attacker?.GetComponent<CharacterBody>();
+                        CharacterMaster master = component1?.master;
+                        Inventory inventory = master?.inventory;
+                        if (inventory != null && !damageInfo.procChainMask.HasProc(ProcType.HealOnHit))
+                        {
+                            int itemCount = inventory.GetItemCount(RoR2Content.Items.Seed);
+                            if (itemCount > 0)
+                            {
+                                HealthComponent component3 = component1?.GetComponent<HealthComponent>();
+                                if ((bool)(UnityEngine.Object)component3)
+                                {
+                                    ProcChainMask procChainMask = damageInfo.procChainMask;
+                                    procChainMask.AddProc(ProcType.HealOnHit);
+                                    double num = (double)component3.Heal((float)itemCount * 0.2f, procChainMask);
+                                }
+                            }
+                        }
+                    });
+
                 };
             }
             catch (Exception e)
