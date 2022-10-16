@@ -48,16 +48,20 @@ namespace LeechingSeedBuff
                     c.Emit(OpCodes.Ldarg_1);
                     c.EmitDelegate<Action<RoR2.DamageInfo>>((damageInfo) =>
                     {
-                        CharacterBody component1 = damageInfo?.attacker?.GetComponent<CharacterBody>();
+                        // Beetle queen bug probably here
+                        if (damageInfo == null) { return; }
+                        if (damageInfo.attacker == null) { return; }
+                        CharacterBody component1 = damageInfo.attacker.GetComponent<CharacterBody>();
                         CharacterMaster master = component1?.master;
                         Inventory inventory = master?.inventory;
                         if (inventory != null && !damageInfo.procChainMask.HasProc(ProcType.HealOnHit))
                         {
                             int itemCount = inventory.GetItemCount(RoR2Content.Items.Seed);
+                            // Bug not below
                             if (itemCount > 0)
                             {
                                 HealthComponent component3 = component1?.GetComponent<HealthComponent>();
-                                if ((bool)(UnityEngine.Object)component3)
+                                if (component3 != null && (bool)(UnityEngine.Object)component3)
                                 {
                                     ProcChainMask procChainMask = damageInfo.procChainMask;
                                     procChainMask.AddProc(ProcType.HealOnHit);
