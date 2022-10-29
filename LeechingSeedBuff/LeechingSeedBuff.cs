@@ -27,7 +27,7 @@ namespace LeechingSeedBuff
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "OakPrime";
         public const string PluginName = "LeechingSeedBuff";
-        public const string PluginVersion = "0.1.0";
+        public const string PluginVersion = "1.1.0";
 
         private readonly Dictionary<string, string> DefaultLanguage = new Dictionary<string, string>();
 
@@ -72,11 +72,24 @@ namespace LeechingSeedBuff
                     });
 
                 };
+                this.ReplaceSeedText();
             }
             catch (Exception e)
             {
                 Logger.LogError(e.Message + " - " + e.StackTrace);
             }
+        }
+        private void ReplaceSeedText()
+        {
+            this.ReplaceString("ITEM_SEED_DESC", "Proc damage <style=cIsHealing>heals</style> you for  <style=cIsHealing>1</style>" +
+                " <style=cStack>(+1 per stack)</style>, <style=cIsHealing>health</style>. Also heals for <style=cIsHealing>0.2</style>" +
+                " <style=cStack>(+0.2 per stack)</style>on all damage instances.");
+        }
+
+        private void ReplaceString(string token, string newText)
+        {
+            this.DefaultLanguage[token] = Language.GetString(token);
+            LanguageAPI.Add(token, newText);
         }
     }
 }
