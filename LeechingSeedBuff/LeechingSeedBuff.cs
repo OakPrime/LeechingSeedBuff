@@ -9,8 +9,6 @@ using System.Collections.Generic;
 
 namespace LeechingSeedBuff
 {
-    //Loads R2API Submodules
-    [R2APISubmoduleDependency(nameof(LanguageAPI))]
 
     //This is an example plugin that can be put in BepInEx/plugins/ExamplePlugin/ExamplePlugin.dll to test out.
     //It's a small plugin that adds a relatively simple item to the game, and gives you that item whenever you press F2.
