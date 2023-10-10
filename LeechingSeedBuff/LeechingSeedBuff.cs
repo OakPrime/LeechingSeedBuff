@@ -4,7 +4,6 @@ using MonoMod.Cil;
 using RoR2;
 using System;
 using R2API;
-using R2API.Utils;
 using System.Collections.Generic;
 
 namespace LeechingSeedBuff
@@ -25,7 +24,7 @@ namespace LeechingSeedBuff
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "OakPrime";
         public const string PluginName = "LeechingSeedBuff";
-        public const string PluginVersion = "1.1.0";
+        public const string PluginVersion = "1.1.1";
 
         private readonly Dictionary<string, string> DefaultLanguage = new Dictionary<string, string>();
 
