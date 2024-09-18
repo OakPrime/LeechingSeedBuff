@@ -24,7 +24,7 @@ namespace LeechingSeedBuff
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "OakPrime";
         public const string PluginName = "LeechingSeedBuff";
-        public const string PluginVersion = "1.1.1";
+        public const string PluginVersion = "1.1.2";
 
         private readonly Dictionary<string, string> DefaultLanguage = new Dictionary<string, string>();
 
@@ -34,7 +34,7 @@ namespace LeechingSeedBuff
             try
             {
                 // Sets leeching seed to heal 0.2 per instance of damage
-                IL.RoR2.HealthComponent.TakeDamage += (il) =>
+                IL.RoR2.HealthComponent.TakeDamageProcess += (il) =>
                 {
                     ILCursor c = new ILCursor(il);
                     c.TryGotoNext(
